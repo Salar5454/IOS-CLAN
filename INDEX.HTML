@@ -2,282 +2,164 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>IOS Clan Name Generator</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
   <style>
-    :root {
-      --bg: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
-      --text: #ffffff;
-      --card: rgba(255, 255, 255, 0.05);
-      --border: rgba(255, 255, 255, 0.1);
-      --button: #00ffc3;
-      --result: #00ffc8;
-    }
-
-    body.light-mode {
-      --bg: #f0f0f0;
-      --text: #1b1b1b;
-      --card: #ffffff;
-      --border: #e0e0e0;
-      --button: #1b1b1b;
-      --result: #00796b;
-    }
-
     * {
       box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Inter', sans-serif;
     }
 
     body {
-      margin: 0;
-      padding: 0;
-      font-family: 'Poppins', sans-serif;
-      background: var(--bg);
-      color: var(--text);
+      min-height: 100vh;
       display: flex;
       align-items: center;
       justify-content: center;
-      height: 100vh;
-      transition: background 0.3s, color 0.3s;
+      background: #0d1117;
       overflow: hidden;
+      position: relative;
+      color: #fff;
     }
 
-    .container {
-      background: var(--card);
-      border: 1px solid var(--border);
-      backdrop-filter: blur(15px);
+    .aurora {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: radial-gradient(circle at 20% 20%, rgba(0, 255, 200, 0.3), transparent 60%),
+                  radial-gradient(circle at 80% 80%, rgba(0, 100, 255, 0.2), transparent 60%),
+                  radial-gradient(circle at 50% 50%, rgba(255, 0, 200, 0.15), transparent 60%);
+      animation: auroraMove 15s infinite alternate ease-in-out;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    @keyframes auroraMove {
+      0% {
+        background-position: 0% 0%, 100% 100%, 50% 50%;
+      }
+      100% {
+        background-position: 100% 0%, 0% 100%, 50% 70%;
+      }
+    }
+
+    .card {
+      position: relative;
+      z-index: 1;
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 2rem;
       border-radius: 20px;
-      padding: 40px;
       width: 90%;
       max-width: 400px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
       text-align: center;
-      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
-      position: relative;
     }
 
     h1 {
-      font-size: 28px;
-      margin-bottom: 20px;
+      font-size: 1.8rem;
+      margin-bottom: 1rem;
+      font-weight: 600;
     }
 
     input {
       width: 100%;
-      padding: 14px;
-      border: none;
-      border-radius: 12px;
-      font-size: 16px;
-      margin-bottom: 20px;
-      outline: none;
-      background-color: rgba(255, 255, 255, 0.1);
-      color: var(--text);
-      transition: 0.3s;
-    }
-
-    body.light-mode input {
-      background-color: #ffffff;
-      color: #1b1b1b;
-    }
-
-    button {
-      padding: 14px 28px;
-      background-color: var(--button);
-      color: var(--text);
-      border: none;
-      border-radius: 12px;
-      font-weight: bold;
-      font-size: 16px;
-      cursor: pointer;
-      transition: 0.3s;
-      margin: 5px;
-    }
-
-    #resultBox {
-      margin-top: 30px;
-      display: none;
-      flex-direction: column;
-      align-items: center;
-      gap: 10px;
-    }
-
-    #result {
-      font-size: 22px;
-      font-weight: bold;
-      color: var(--result);
-    }
-
-    .copy-btn, .whatsapp-btn {
-      padding: 10px 16px;
+      padding: 0.8rem;
       border-radius: 10px;
-      font-size: 14px;
-      font-weight: 600;
       border: none;
-      cursor: pointer;
-      transition: 0.3s;
-    }
-
-    .copy-btn {
-      background-color: #007fff;
+      margin-bottom: 1rem;
+      font-size: 1rem;
+      background: rgba(255, 255, 255, 0.1);
       color: white;
     }
 
-    .whatsapp-btn {
-      background-color: #25D366;
-      color: white;
-    }
-
-    .copy-btn:hover {
-      background-color: #0063cc;
-    }
-
-    .whatsapp-btn:hover {
-      background-color: #1ebe5b;
-    }
-
-    .copied-message {
-      margin-top: 10px;
-      color: #00ff91;
-      font-size: 14px;
-    }
-
-    .popup {
-      position: absolute;
-      top: -60px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: var(--button);
-      color: var(--text);
-      padding: 16px 32px;
-      border-radius: 12px;
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
-      font-weight: 600;
-      opacity: 0;
-      animation: slideDownFade 6s forwards;
-      z-index: 999;
-    }
-
-    .theme-toggle {
-      position: absolute;
-      top: 20px;
-      right: 20px;
-      background: transparent;
+    .btn {
+      background: #00ffcc;
+      color: #000;
+      padding: 0.8rem 1.2rem;
       border: none;
-      font-size: 20px;
+      border-radius: 10px;
+      font-weight: bold;
       cursor: pointer;
-      color: var(--text);
+      margin: 0.3rem;
+      transition: 0.3s ease;
     }
 
-    @keyframes slideDownFade {
-      0% { top: -60px; opacity: 0; }
-      15% { top: 30px; opacity: 1; }
-      85% { top: 30px; opacity: 1; }
-      100% { top: -60px; opacity: 0; }
+    .btn:hover {
+      background: #00e6b3;
     }
 
-    @media (max-width: 480px) {
-      .container {
-        padding: 30px 20px;
-      }
+    .output {
+      margin-top: 1rem;
+      font-size: 1.2rem;
+      font-weight: 500;
+    }
 
-      h1 {
-        font-size: 22px;
-      }
-
-      button {
-        width: 100%;
-      }
-
-      #resultBox {
-        align-items: stretch;
-      }
+    .dark-mode-toggle {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      background: rgba(255,255,255,0.1);
+      border: none;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      color: white;
+      font-size: 1.2rem;
+      cursor: pointer;
+      backdrop-filter: blur(8px);
+      z-index: 2;
     }
   </style>
 </head>
 <body>
-
-  <div class="popup">@IOS CLAN - Welcome!</div>
-
-  <div class="container">
-    <button class="theme-toggle" onclick="toggleTheme()">🌙</button>
+  <div class="aurora"></div>
+  <button class="dark-mode-toggle" onclick="toggleDarkMode()">🌙</button>
+  <div class="card">
     <h1>IOS Clan Name Generator</h1>
-    <input type="text" id="realName" placeholder="Enter your real name" />
-    <button onclick="generateName()">Generate Name</button>
-
-    <div id="resultBox">
-      <div id="result"></div>
-      <button class="copy-btn" onclick="copyName()">Copy</button>
-      <button class="whatsapp-btn" onclick="shareToWhatsApp()">Share on WhatsApp</button>
-    </div>
-    <div class="copied-message" id="copiedMsg"></div>
+    <input type="text" id="nameInput" placeholder="Enter your name" />
+    <button class="btn" onclick="generateName()">Generate</button>
+    <button class="btn" onclick="copyName()">Copy</button>
+    <button class="btn" onclick="shareWhatsApp()">Share</button>
+    <div class="output" id="outputName"></div>
   </div>
-
-  <!-- 🔊 Click Sound Effect -->
-  <audio id="clickSound" src="https://www.soundjay.com/buttons/sounds/button-16.mp3" preload="auto"></audio>
-
   <script>
-    function playClick() {
-      const audio = document.getElementById("clickSound");
-      audio.currentTime = 0;
-      audio.play();
-    }
-
     function generateName() {
-      playClick();
-      const name = document.getElementById("realName").value.trim();
-      const result = document.getElementById("result");
-      const resultBox = document.getElementById("resultBox");
-      const copiedMsg = document.getElementById("copiedMsg");
-
-      copiedMsg.innerText = "";
-
-      if (name === "") {
-        result.innerText = "Please enter a name.";
-        result.style.color = "#ff8080";
-        resultBox.style.display = "flex";
-        return;
+      const input = document.getElementById("nameInput").value.trim();
+      const output = document.getElementById("outputName");
+      if (input) {
+        output.textContent = `@IOS ${input.toUpperCase()}`;
+        playSound();
+      } else {
+        output.textContent = "Please enter a name.";
       }
-
-      result.style.color = getComputedStyle(document.body).getPropertyValue('--result');
-      result.innerText = "@IOS " + name.toUpperCase();
-      resultBox.style.display = "flex";
     }
 
     function copyName() {
-      playClick();
-      const text = document.getElementById("result").innerText;
-      navigator.clipboard.writeText(text).then(() => {
-        document.getElementById("copiedMsg").innerText = "Copied to clipboard!";
-      }).catch(() => {
-        document.getElementById("copiedMsg").innerText = "Failed to copy.";
-      });
+      const output = document.getElementById("outputName").textContent;
+      navigator.clipboard.writeText(output);
+      alert("Copied to clipboard: " + output);
+      playSound();
     }
 
-    function shareToWhatsApp() {
-      playClick();
-      const name = document.getElementById("result").innerText;
-      if (!name || name === "Please enter a name.") {
-        alert("Generate a name first!");
-        return;
-      }
-
-      const message = `Check out my new IOS Clan name: *${name}* 👑\nMade using the IOS Clan Generator!`;
-      const url = "https://wa.me/?text=" + encodeURIComponent(message);
-      window.open(url, "_blank");
+    function shareWhatsApp() {
+      const text = document.getElementById("outputName").textContent;
+      const url = `https://wa.me/?text=${encodeURIComponent(text)}`;
+      window.open(url, '_blank');
     }
 
-    function toggleTheme() {
-      playClick();
-      document.body.classList.toggle('light-mode');
-      const isLight = document.body.classList.contains('light-mode');
-      document.querySelector('.theme-toggle').innerText = isLight ? '🌞' : '🌙';
-      localStorage.setItem('theme', isLight ? 'light' : 'dark');
+    function playSound() {
+      const beep = new Audio("https://www.soundjay.com/button/beep-07.mp3");
+      beep.play();
     }
 
-    window.onload = () => {
-      const savedTheme = localStorage.getItem('theme');
-      if (savedTheme === 'light') {
-        document.body.classList.add('light-mode');
-        document.querySelector('.theme-toggle').innerText = '🌞';
-      }
+    function toggleDarkMode() {
+      document.body.classList.toggle("light-mode");
     }
   </script>
 </body>
